@@ -14,14 +14,14 @@
     {% block body %}{% endblock %}
     <header>
         <div class="container">
-            <form action="" method="get" class="d-flex">
+            <form action="{{ path('materiels_read')}}" method="POST" class="d-flex">
             <input class="form-control me-sm-2" type="text" placeholder="Search">
             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                   </form>
-            <form action="" method="get">
+            <form action="{{ path('materiels_read')}}" method="POST">
                 <fieldset>
                   <div class="form-group">
-                    <select class="form-select" id="famille">
+                    <select name="famille"class="form-select" id="famille">
                       <option>Choisir la famille :</option>
                         {% for type in types %}
                             <option value="{{ type.id }} ">{{ type.famille }}</option>
@@ -29,10 +29,10 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <select class="form-select" id="marque">
+                    <select name="marque" class="form-select" id="marque">
                       <option>Choisir la marque : </option>
-                        {% for materiel in materiels %}
-                            <option value="{{ materiel.id }} ">{{ materiel.marque }}</option>
+                        {% for marque in marques %}
+                            <option value="{{ marque.marque }} ">{{ marque.marque }}</option>
                         {% endfor %}
                     </select>
                   </div>
@@ -57,17 +57,17 @@
             </tr>
                   </thead>
                   <tbody>
-            <tr class="table-active">
-              {% for materiel in materiels %}
+                    {% for materiel in materiels %}
+                    <tr class="table-active">
                     <td>{{ materiel.id }}</td>
                     <td>{{ materiel.nomCourt }}</td>
                     <td>{{ materiel.marque }}</td>
                     <td>{{ materiel.prixPublic }}</td>
                     <td>{{ materiel.referenceFabricant }}</td>
-                    <td>{{ materiel.type }}</td>
-                    <td>{{ materiel.type }}</td>
+                    <td>{{ materiel.type.nom }}</td>
+                    <td>{{ materiel.type.famille }}</td>
+                    </tr>
         {% endfor %}
-            </tr>
                   </tbody>
         </section>
     </main>

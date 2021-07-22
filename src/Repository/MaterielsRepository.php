@@ -19,20 +19,32 @@ class MaterielsRepository extends ServiceEntityRepository
         parent::__construct($registry, Materiels::class);
     }
 
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    public function findAllWithType()
+    {   
+        $qb = $this->createQueryBuilder('materiels')
+        ->leftJoin ('materiels.type','types')
+        ->addSelect('types');
+        
+        $query = $qb->getQuery(); 
+        $results = $query->getResult();
+        return $results; 
     }
-   
 
-    
+    public function findAllWithTypeId($idFamille, $idMarque ="null")
+    {   
+        $qb = $this->createQueryBuilder('materiels')
+        ->leftJoin ('materiels.type','types')
+        ->addSelect('types')
+        ->andwhere('materiels.type = :idFamille')
+        ->orWhere('materiels.marque = :idMarque')
+        ->setParameter('idFamille', $idFamille)
+        ->setParameter('idMarque', $idMarque);
+        
+        $query = $qb->getQuery(); 
+        $results = $query->getResult();
+        return $results; 
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Materiels
