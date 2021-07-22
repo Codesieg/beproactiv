@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}beproactiv{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+    </head>
+    <body>
+    {% block body %}{% endblock %}
+    <header>
+        <div class="container">
+            <form action="" method="get" class="d-flex">
+            <input class="form-control me-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+            <form action="" method="get">
+                <fieldset>
+                  <div class="form-group">
+                    <select class="form-select" id="famille">
+                      <option>Choisir la famille :</option>
+                        {% for type in types %}
+                            <option value="{{ type.id }} ">{{ type.famille }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <select class="form-select" id="marque">
+                      <option>Choisir la marque : </option>
+                        {% for materiel in materiels %}
+                            <option value="{{ materiel.id }} ">{{ materiel.marque }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </fieldset>
+              </form>
+            
+        </div>
+    </header>
+    <main class="container">
+        <section class="result">
+            <table class="table table-hover">
+                  <thead>
+            <tr>
+              <th scope="col">Materiel id</th>
+              <th scope="col">Nom Court</th>
+              <th scope="col">Marque</th>
+              <th scope="col">Prix public</th>
+              <th scope="col">Reference fabricant</th>
+              <th scope="col">Type</th>
+              <th scope="col">Type metier</th>
+            </tr>
+                  </thead>
+                  <tbody>
+            <tr class="table-active">
+              {% for materiel in materiels %}
+                    <td>{{ materiel.id }}</td>
+                    <td>{{ materiel.nomCourt }}</td>
+                    <td>{{ materiel.marque }}</td>
+                    <td>{{ materiel.prixPublic }}</td>
+                    <td>{{ materiel.referenceFabricant }}</td>
+                    <td>{{ materiel.type }}</td>
+                    <td>{{ materiel.type }}</td>
+        {% endfor %}
+            </tr>
+                  </tbody>
+        </section>
+    </main>
+</table>
+</body>
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</html>
