@@ -24,9 +24,8 @@ class MaterielsController extends AbstractController
      */
     public function browse(MaterielsRepository $materielsRepository, TypesRepository $typesRepository, PaginatorInterface $paginator, Request $request  ): Response
     {
+
         $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
-        // $this->import($materielsRepository, $typesRepository);
-        // $materiels = $materielsRepository->findAllWithType();
         $marques = $materielsRepository->findAllDisinct();
         $types = $typesRepository->findAll();
 
