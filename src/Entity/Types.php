@@ -25,12 +25,12 @@ class Types
     private $nom;
 
     /**
-     * @ORM\OneToMany(targetEntity=Materiels::class, mappedBy="type")
+     * @ORM\OneToMany(targetEntity=Materiels::class, mappedBy="type", cascade={"persist"})
      */
     private $materiels;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Metiers::class, inversedBy="types")
+     * @ORM\ManyToOne(targetEntity=Metiers::class, inversedBy="types", cascade={"persist"})
      */
     private $metier;
 

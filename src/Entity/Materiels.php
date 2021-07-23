@@ -4,9 +4,10 @@ namespace App\Entity;
 
 use App\Repository\MaterielsRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=MaterielsRepository::class)
+ * @UniqueEntity(fields={"materiel_id"})
  */
 class Materiels
 {
@@ -38,7 +39,7 @@ class Materiels
     private $referenceFabricant;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Types::class, inversedBy="materiels")
+     * @ORM\ManyToOne(targetEntity=Types::class, inversedBy="materiels", cascade={"persist"})
      */
     private $type;
 
@@ -46,6 +47,11 @@ class Materiels
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $commentaire;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $materielId;
 
     public function getId(): ?int
     {
@@ -120,6 +126,18 @@ class Materiels
     public function setCommentaire(?string $commentaire): self
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getMaterielId(): ?int
+    {
+        return $this->materielId;
+    }
+
+    public function setMaterielId(?int $materielId): self
+    {
+        $this->materielId = $materielId;
 
         return $this;
     }

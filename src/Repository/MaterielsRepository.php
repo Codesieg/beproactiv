@@ -30,16 +30,49 @@ class MaterielsRepository extends ServiceEntityRepository
         return $results; 
     }
 
+    public function findAllDisinct()
+    {   
+        $qb = $this->createQueryBuilder('materiels')
+        ->select('DISTINCT materiels.marque');
+
+        $query = $qb->getQuery(); 
+        $results = $query->getResult();
+        return $results; 
+    }
+
     public function findAllWithTypeId($idFamille, $idMarque ="null")
     {   
         $qb = $this->createQueryBuilder('materiels')
         ->leftJoin ('materiels.type','types')
         ->addSelect('types')
-        ->andwhere('materiels.type = :idFamille')
+        ->orwhere('materiels.type = :idFamille')
         ->orWhere('materiels.marque = :idMarque')
         ->setParameter('idFamille', $idFamille)
         ->setParameter('idMarque', $idMarque);
         
+        $query = $qb->getQuery(); 
+        $results = $query->getResult();
+        return $results; 
+    }
+
+    public function search($search) {
+        $qb = $this->createQueryBuilder('materiels')
+        ->orWhere('materiels.marque LIKE :idMarque')
+        ->orWhere('materiels.nomCourt LIKE :idNomCourt')
+        ->orWhere('materiels.commentaire LIKE :idCommentaire')
+        ->orWhere('materiels.referenceFabricant LIKE :idReferenceFabricant')
+        ->setParameter('idMarque', '%'.$search.'%')
+        ->setParameter('idNomCourt', '%'.$search.'%')
+        ->setParameter('idReferenceFabricant', '%'.$search.'%')
+        ->setParameter('idCommentaire', '%'.$search.'%');
+
+        // ->orwhere('materiels.marque LIKE :title')
+        // ->setParameter('title', '%'.$search.'%');
+        
+        // $qb->add('where',$qb->expr()->like('materiels.type', ':idMarque'))
+        // ->setParameter('idMarque', $search);
+        // dd($qb);
+
         $query = $qb->getQuery(); 
         $results = $query->getResult();
         return $results; 
