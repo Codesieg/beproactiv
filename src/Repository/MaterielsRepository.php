@@ -66,13 +66,6 @@ class MaterielsRepository extends ServiceEntityRepository
         ->setParameter('idReferenceFabricant', '%'.$search.'%')
         ->setParameter('idCommentaire', '%'.$search.'%');
 
-        // ->orwhere('materiels.marque LIKE :title')
-        // ->setParameter('title', '%'.$search.'%');
-        
-        // $qb->add('where',$qb->expr()->like('materiels.type', ':idMarque'))
-        // ->setParameter('idMarque', $search);
-        // dd($qb);
-
         $query = $qb->getQuery(); 
         $results = $query->getResult();
         return $results; 
