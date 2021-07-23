@@ -35,11 +35,22 @@ class MaterielsRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('materiels')
         ->leftJoin ('materiels.type','types')
         ->addSelect('types')
-        ->andwhere('materiels.type = :idFamille')
+        ->orwhere('materiels.type = :idFamille')
         ->orWhere('materiels.marque = :idMarque')
         ->setParameter('idFamille', $idFamille)
         ->setParameter('idMarque', $idMarque);
         
+        $query = $qb->getQuery(); 
+        $results = $query->getResult();
+        return $results; 
+    }
+
+    public function ifExist($id) {
+        $qb = $this->createQueryBuilder('materiels')
+        ->andwhere('materiels.materielId = :id')
+        ->setParameter('id', $id);
+
+
         $query = $qb->getQuery(); 
         $results = $query->getResult();
         return $results; 

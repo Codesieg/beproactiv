@@ -19,6 +19,7 @@ class MaterielsType extends AbstractType
             ->add('referenceFabricant')
             ->add('commentaire')
             ->add('type')
+            ->add('materielId')
         ;
     }
 
@@ -26,6 +27,7 @@ class MaterielsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Materiels::class,
+            'allow_extra_fields' => true
         ]);
     }
 }
