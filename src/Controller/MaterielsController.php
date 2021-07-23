@@ -10,7 +10,9 @@ use App\Repository\TypesRepository;
 use App\Entity\Materiels;
 use App\Entity\Metiers;
 use App\Entity\Types;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/", name="materiels_")
@@ -20,16 +22,22 @@ class MaterielsController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(MaterielsRepository $materielsRepository, TypesRepository $typesRepository): Response
+    public function browse(MaterielsRepository $materielsRepository, TypesRepository $typesRepository, PaginatorInterface $paginator, Request $request  ): Response
     {
         $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
         // $this->import($materielsRepository, $typesRepository);
-        $materiels = $materielsRepository->findAllWithType();
+        // $materiels = $materielsRepository->findAllWithType();
         $marques = $materielsRepository->findAllDisinct();
         $types = $typesRepository->findAll();
 
         $famille = filter_input(INPUT_POST, 'famille', FILTER_SANITIZE_SPECIAL_CHARS);
         $marque = filter_input(INPUT_POST, 'marque', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $materiels = $paginator->paginate(
+            $materielsRepository->findAllWithType(),
+            $request->query->getInt('page', 1),
+            25
+        );
 
         return $this->render('base.html.twig', [
             'materiels' => $materiels,
@@ -71,6 +79,7 @@ class MaterielsController extends AbstractController
      */
     public function import(MaterielsRepository $materielsRepository, TypesRepository $typesRepository): Response
     {
+        set_time_limit(0);
         $httpClient = HttpClient::create();
         $token = "?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IjlSWVRsc0dzQkJUZ2RTdTdYUG9JM2V5NzB4RXZqa0hGRmNQU1drOGFwWVptRnpqTmRkeWN2ZWpmYVRnQXRmVFUyMDkiLCJzdWIiOjIwOSwiaXNzIjoiaHR0cHM6Ly9wcmVwcm9kLnN0YXJpZi5jcmlzdGFsY3JtLmZyIiwiaWF0IjoxNjAzOTYxMjk0LCJleHAiOjQ3NTc1NjEyOTQsIm5iZiI6MTYwMzk2MTI5NCwianRpIjoiV0M3UzlJMmxkZmZCcEFuVyJ9.2lv_XQZk8PXUEMhpz6mDs-C02FcRRKTjz06ys3zsioU";
 
