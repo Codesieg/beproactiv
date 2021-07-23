@@ -71,6 +71,10 @@ class MaterielsRepository extends ServiceEntityRepository
         return $results; 
     }
 
+    public function pagination(){
+        return $this->findAllWithType()->getQuery();
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Materiels
