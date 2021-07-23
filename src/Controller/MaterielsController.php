@@ -28,7 +28,7 @@ class MaterielsController extends AbstractController
     {
         $this->import($materielsRepository, $typesRepository);
         $materiels = $materielsRepository->findAllWithType();
-        $marques = $materielsRepository->findAllWithType();
+        $marques = $materielsRepository->findAllDisinct();
         $types = $typesRepository->findAll();
         return $this->render('base.html.twig', [
             'materiels' => $materiels,
@@ -45,12 +45,11 @@ class MaterielsController extends AbstractController
 
         $famille = filter_input(INPUT_POST, 'famille', FILTER_SANITIZE_SPECIAL_CHARS);
         $marque = filter_input(INPUT_POST, 'marque', FILTER_SANITIZE_SPECIAL_CHARS);
-        // dump($famille, $marque);
         $materiels = $materielsRepository->findAllWithTypeId($famille, $marque);
 
         $types = $typesRepository->findAll();
-        $marques = $materielsRepository->findAllWithType();
-        dump($materiels);
+        $marques = $materielsRepository->findAllDisinct();
+        
         if ($materiels == null) {
             return $this->redirectToRoute('materiels_browse');
         }
@@ -68,7 +67,7 @@ class MaterielsController extends AbstractController
     {
         $httpClient = HttpClient::create();
         $token = "?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IjlSWVRsc0dzQkJUZ2RTdTdYUG9JM2V5NzB4RXZqa0hGRmNQU1drOGFwWVptRnpqTmRkeWN2ZWpmYVRnQXRmVFUyMDkiLCJzdWIiOjIwOSwiaXNzIjoiaHR0cHM6Ly9wcmVwcm9kLnN0YXJpZi5jcmlzdGFsY3JtLmZyIiwiaWF0IjoxNjAzOTYxMjk0LCJleHAiOjQ3NTc1NjEyOTQsIm5iZiI6MTYwMzk2MTI5NCwianRpIjoiV0M3UzlJMmxkZmZCcEFuVyJ9.2lv_XQZk8PXUEMhpz6mDs-C02FcRRKTjz06ys3zsioU";
-        
+
         $response = $httpClient->request('GET', 'https://preprod.starif.cristalcrm.fr/api/materiels' . $token);
 
         $content = $response->getContent();
@@ -76,7 +75,6 @@ class MaterielsController extends AbstractController
         $allContent = $content['data'];
 
         foreach ($allContent as $NewMateriel) {
-            dump($NewMateriel['type']['famille']);
             $materiel = new Materiels();
             $type = new Types();
             $metier = new Metiers();

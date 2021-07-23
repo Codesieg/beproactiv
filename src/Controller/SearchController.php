@@ -17,10 +17,8 @@ class SearchController extends AbstractController
     public function search(MaterielsRepository $materielsRepository, TypesRepository $typesRepository): Response
     {
         $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
-        dump($search);
-
-        $materiels = $materielsRepository->findby(['nomCourt' => $search],['marque' => $search]
-        );
+        $materiels = $materielsRepository->search($search);
+        
         if ($materiels == null) {
             return $this->redirectToRoute('materiels_browse');
         }
