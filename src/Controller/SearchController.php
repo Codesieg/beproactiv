@@ -18,6 +18,8 @@ class SearchController extends AbstractController
     {
         $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
         $materiels = $materielsRepository->search($search);
+        $famille = filter_input(INPUT_POST, 'famille', FILTER_SANITIZE_SPECIAL_CHARS);
+        $marque = filter_input(INPUT_POST, 'marque', FILTER_SANITIZE_SPECIAL_CHARS);
         
         if ($materiels == null) {
             return $this->redirectToRoute('materiels_browse');
@@ -30,6 +32,9 @@ class SearchController extends AbstractController
             'materiels' => $materiels,
             'types' => $types,
             'marques' => $marques,
+            'familleChoisi' => $famille,
+            'marqueChoisi' => $marque,
+            'search' => $search
         ]);
     }
 }
